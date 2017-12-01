@@ -26,4 +26,10 @@ public class WaveIO {
 
         return buffer;
     }
+
+    public WaveIO(){
+        this.waveChunk = new WaveChunk();
+        this.fmtChunk = new FmtChunk();
+        this.dataChunk = new DataChunk();
+    }
 }

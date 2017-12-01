@@ -62,7 +62,7 @@ public class Wave {
         fos.close();
     }
 
-    public short[] WaveLoad(String filePath) throws IOException, JvprException {
+    public static short[] WaveLoad(String filePath) throws IOException, JvprException {
         byte[] header = new byte[44];
         int iTotalReaded = 0, iBytesReaded = 0;
         int lengthOfData;
@@ -82,10 +82,10 @@ public class Wave {
             throw new JvprException("this wave channel is not 1");
         }
 
-        lengthOfData = (int) (header[40]);
-        lengthOfData |= (int) (header[41]) << 8;
-        lengthOfData |= (int) (header[42]) << 16;
-        lengthOfData |= (int) (header[43]) << 24;
+        lengthOfData = (header[40] & 0xff);
+        lengthOfData |= (header[41] << 8) & 0xff00;
+        lengthOfData |= (header[42] << 24) >>> 8;
+        lengthOfData |= (header[43] << 24);
 
         if (lengthOfData <= 0) {
             throw new JvprException("length of wave data is 0");
@@ -110,11 +110,25 @@ public class Wave {
 
         short[] buf = new short[wavData.size() / 2];
         for (int i = 0, j = 0; i < wavData.size() && j < buf.length; ) {
-            buf[j] = (short) (wavData.get(i));
-            buf[j] |= (short) (wavData.get(i + 1) << 8);
+            buf[j] = (short) (wavData.get(i)& 0xff);
+            buf[j] |= (short) ((wavData.get(i + 1) << 8)& 0xff00);
             i += 2;
             j++;
         }
         return buf;
     }
+
+    public static void main(String[] args) {
+
+        try {
+            short[] data = Wave.WaveLoad("C:\\Users\\qqq\\Desktop\\gbaav.wav");
+            System.out.println(data.length);
+
+            Wave.WaveSave("C:\\Users\\qqq\\Desktop\\test.wav",data,8000,data.length);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
 }

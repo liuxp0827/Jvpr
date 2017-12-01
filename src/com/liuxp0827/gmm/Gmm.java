@@ -177,29 +177,29 @@ public class Gmm {
                 }
             }
 
-            for (int i = 0; i < this.Frames; i++) {
-                dlogfrmprob = constant.LOGZERO;
-                for (int j = 0; j < mixtures; j++) {
-                    dgama[j] = this.LMixProb(this.FeatureData[i], j);
-                    dgama[j] += dlogmixw[j];
-                    dlogfrmprob = this.LogAdd(dgama[j], dlogfrmprob);
-                }
-
-                rubbish += dlogfrmprob;
-
-                for (int j = 0; j < mixtures; j++) {
-                    dgama[j] -= dlogfrmprob;
-                    dgama[j] = Math.exp(dgama[j]);
-                    dsumgama[j] += dgama[j];
-
-                    // update weights
-                    dmixw[j] += dgama[j];
-                    for (int k = 0; k < this.VectorSize; k++) {
-                        mean[j][k] += dgama[j] * this.FeatureData[i][k];
-                        covar[j][k] += dgama[j] * (double) (this.FeatureData[i][k]) * (double) (this.FeatureData[i][k]);
-                    }
-                }
-            }
+//            for (int i = 0; i < this.Frames; i++) {
+//                dlogfrmprob = constant.LOGZERO;
+//                for (int j = 0; j < mixtures; j++) {
+//                    dgama[j] = this.LMixProb(this.FeatureData[i], j);
+//                    dgama[j] += dlogmixw[j];
+//                    dlogfrmprob = this.LogAdd(dgama[j], dlogfrmprob);
+//                }
+//
+//                rubbish += dlogfrmprob;
+//
+//                for (int j = 0; j < mixtures; j++) {
+//                    dgama[j] -= dlogfrmprob;
+//                    dgama[j] = Math.exp(dgama[j]);
+//                    dsumgama[j] += dgama[j];
+//
+//                    // update weights
+//                    dmixw[j] += dgama[j];
+//                    for (int k = 0; k < this.VectorSize; k++) {
+//                        mean[j][k] += dgama[j] * this.FeatureData[i][k];
+//                        covar[j][k] += dgama[j] * (double) (this.FeatureData[i][k]) * (double) (this.FeatureData[i][k]);
+//                    }
+//                }
+//            }
 
             rubbish /= (double) (this.Frames); // rubbish = LLR
 
